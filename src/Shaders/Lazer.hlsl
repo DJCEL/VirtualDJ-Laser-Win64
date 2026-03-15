@@ -67,6 +67,7 @@ float4 Lazer_Club_v1(float2 texcoord, float time, float beat)
     float beams = sin(angle * 16.0 + time * 8.0);
     beams = pow(abs(beams), 6.0);
 
+
     // we combine pulse, burst and beams
     float flash = pulse * 1.5 + burst * pulse * 2.5 + beams * pulse * 1.5;
     float3 col = float3(flash, flash, flash);
@@ -290,6 +291,263 @@ float4 Lazer_Club_v4(float2 texcoord, float time, float beat)
     return float4(col, 1.0);
 }
 //--------------------------------------------------------------------------------------
+float4 Lazer_Club_v5(float2 texcoord, float time, float beat)
+{
+    float2 center = float2(0.5, 0.5);
+    float2 p = texcoord - center;
+
+    float dist = length(p);
+
+    // base polar angle
+    float angle = atan2(p.y, p.x);
+
+    //--------------------------------
+    // LASER FAN SWEEP (global rotation)
+    //--------------------------------
+
+    float sweep = sin(time * 1.5) * 1.0;
+    angle += sweep;
+
+    //--------------------------------
+    // beam density
+    //--------------------------------
+
+    float pulse = beatPulse(beat);
+    float beamCount = 24.0;
+
+    //--------------------------------
+    // thin beams
+    //--------------------------------
+
+    float beam = abs(sin(angle * beamCount));
+    beam = smoothstep(0.985, 1.0, beam);
+
+    //--------------------------------
+    // glow
+    //--------------------------------
+
+    float glow = exp(-dist * 8.0);
+
+    float intensity = beam * 2.0 + glow * 0.5;
+
+    //--------------------------------
+    // fog falloff
+    //--------------------------------
+
+    intensity *= exp(-dist * 3.0);
+
+    //--------------------------------
+    // flicker
+    //--------------------------------
+
+    float flicker = hash(floor(time * 80.0));
+    intensity *= 1.0 + flicker * 0.1;
+
+    //--------------------------------
+    // green laser
+    //--------------------------------
+
+    float3 laserColor = float3(0.0, 1.2, 0.1);
+
+    float3 col = intensity * laserColor;
+
+    return float4(col, 1.0);
+}
+//--------------------------------------------------------------------------------------
+float4 Lazer_Club_v6(float2 texcoord, float time, float beat)
+{
+    float2 center = float2(0.5, 0.5);
+    float2 p = texcoord - center;
+
+    float pulse = beatPulse(beat);
+
+    //--------------------------------
+    // SPLIT vertical motion
+    //--------------------------------
+
+    float sweep = sin(time * 1.8) * 0.5;
+
+    if (texcoord.y > 0.5)
+        p.y += abs(sweep); // top moves toward center
+    else
+        p.y -= abs(sweep); // bottom moves toward center
+
+    //--------------------------------
+    // polar coordinates
+    //--------------------------------
+
+    float dist = length(p);
+    float angle = atan2(p.y, p.x);
+
+    //--------------------------------
+    // beam count
+    //--------------------------------
+
+    float beamCount = 28.0;
+
+    //--------------------------------
+    // thin laser beams
+    //--------------------------------
+
+    float beam = abs(sin(angle * beamCount));
+    beam = smoothstep(0.985, 1.0, beam);
+
+    //--------------------------------
+    // glow
+    //--------------------------------
+
+    float glow = exp(-dist * 9.0);
+
+    float intensity = beam * 2.0 + glow * 0.5;
+
+    //--------------------------------
+    // fog attenuation
+    //--------------------------------
+
+    intensity *= exp(-dist * 3.0);
+
+    //--------------------------------
+    // flicker
+    //--------------------------------
+
+    float flicker = hash(floor(time * 80.0));
+    intensity *= 1.0 + flicker * 0.15 * pulse;
+
+    //--------------------------------
+    // laser color
+    //--------------------------------
+
+    float3 laserGreen = float3(0.0, 1.3, 0.15);
+
+    float3 col = intensity * laserGreen;
+
+    return float4(col, 1.0);
+}
+//--------------------------------------------------------------------------------------
+float4 Lazer_Club_v7(float2 uv, float time, float beat)
+{
+    float2 center = float2(0.5, 0.5);
+    float2 p = uv - center;
+
+    float dist = length(p);
+
+    // Base polar angle
+    float angle = atan2(p.y, p.x);
+
+    //--------------------------------
+    // clean vertical scanner
+    //--------------------------------
+
+    float sweep = sin(time * 1.5) * 0.9;
+
+    float signHalf = (uv.y > 0.5) ? -1.0 : 1.0;
+    angle += sweep * signHalf;
+
+    //--------------------------------
+    // beam generation
+    //--------------------------------
+
+    float beamCount = 28.0;
+
+    float beam = abs(sin(angle * beamCount));
+    beam = smoothstep(0.985, 1.0, beam);
+
+    //--------------------------------
+    // glow
+    //--------------------------------
+
+    float glow = exp(-dist * 8.0);
+
+    float intensity = beam * 2.0 + glow * 0.6;
+
+    //--------------------------------
+    // fog
+    //--------------------------------
+
+    intensity *= exp(-dist * 3.0);
+
+    //--------------------------------
+    // beat flicker
+    //--------------------------------
+
+    float pulse = beatPulse(beat);
+    float flicker = hash(floor(time * 90.0));
+
+    intensity *= 1.0 + flicker * 0.1 * pulse;
+
+    //--------------------------------
+    // laser green
+    //--------------------------------
+
+    float3 laserGreen = float3(0.05, 1.3, 0.1);
+
+    float3 col = intensity * laserGreen;
+
+    return float4(col, 1.0);
+}
+//--------------------------------------------------------------------------------------
+float4 Lazer_Club_v8(float2 uv, float time, float beat)
+{
+    float2 center = float2(0.5, 0.5);
+    float2 p = uv - center;
+
+    float dist = length(p);
+    float angle = atan2(p.y, p.x);
+
+    //--------------------------------
+    // VERTICAL LASER MOTION
+    //--------------------------------
+
+    float sweep = sin(time * 1.5) * 2.0;
+
+    float signHalf = (uv.y > 0.5) ? -1.0 : 1.0;
+
+    float verticalOffset = sweep * signHalf;
+
+    //--------------------------------
+    // laser beams
+    //--------------------------------
+
+    float beamCount = 28.0;
+
+    float beam = abs(sin(angle * beamCount + verticalOffset));
+    beam = smoothstep(0.985, 1.0, beam);
+
+    //--------------------------------
+    // glow
+    //--------------------------------
+
+    float glow = exp(-dist * 8.0);
+
+    float intensity = beam * 2.0 + glow * 0.5;
+
+    //--------------------------------
+    // fog
+    //--------------------------------
+
+    intensity *= exp(-dist * 3.0);
+
+    //--------------------------------
+    // flicker
+    //--------------------------------
+
+    float pulse = beatPulse(beat);
+    float flicker = hash(floor(time * 90.0));
+
+    intensity *= 1.0 + flicker * 0.1 * pulse;
+
+    //--------------------------------
+    // laser green
+    //--------------------------------
+
+    float3 laserGreen = float3(0.05, 1.3, 0.1);
+
+    float3 col = intensity * laserGreen;
+
+    return float4(col, 1.0);
+}
+
+//--------------------------------------------------------------------------------------
 float4 Lazer_RaveTunnel(float2 texcoord, float time)
 {
     float2 uv = texcoord;
@@ -321,10 +579,14 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float4 color = float4(0, 0, 0, 0);
     
-    color = Lazer_Club_v1(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v2(texcoord, iTime, iBeat);
+    //color = Lazer_Club_v1(texcoord, iTime, iBeat);
+    color = Lazer_Club_v2(texcoord, iTime, iBeat);
     //color = Lazer_Club_v3(texcoord, iTime, iBeat);
     //color = Lazer_Club_v4(texcoord, iTime, iBeat);
+    //color = Lazer_Club_v5(texcoord, iTime, iBeat);
+    //color = Lazer_Club_v6(texcoord, iTime, iBeat);
+    //color = Lazer_Club_v7(texcoord, iTime, iBeat);
+    //color = Lazer_Club_v8(texcoord, iTime, iBeat);
     
     //color = Lazer_RaveTunnel(texcoord, iTime);
 
