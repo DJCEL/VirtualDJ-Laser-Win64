@@ -318,9 +318,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float iTime = g_FX_Time;
     float iBeat = g_FX_SongPosBeats;
    
-    
     float2 texcoord = input.TexCoord;
-    float4 colorIn = g_Texture2D.Sample(g_SamplerState, texcoord);
     float4 color = float4(0, 0, 0, 0);
     
     color = Lazer_Club_v1(texcoord, iTime, iBeat);
