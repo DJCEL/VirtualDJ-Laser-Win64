@@ -127,27 +127,6 @@ float4 Lazer_Club_v2(float2 texcoord, float time, float beat)
     return color;
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_RaveTunnel(float2 texcoord, float time)
-{
-    float2 uv = texcoord;
-    float2 center = float2(0.5f, 0.5f);
-    float2 p = uv - center;
-    
-    float dist = length(p);
-    float angle = atan2(p.y, p.x);
-    
-    float pattern = sin(dist * 20.0 - time * 6.0 + angle * 5.0);
-    
-    float v = abs(pattern);
-    
-    float4 color = float4(v, v, v, 1.0);
-    
-    // green
-    color *= float4(0.0, 1.0, 0.0, 1.0f);
-    
-    return color;  
-}
-//--------------------------------------------------------------------------------------
 float4 Lazer_Club_v3(float2 texcoord, float time, float beat)
 {
     float2 uv = texcoord;
@@ -309,6 +288,27 @@ float4 Lazer_Club_v4(float2 texcoord, float time, float beat)
     float3 col = beams * laserGreen;
 
     return float4(col, 1.0);
+}
+//--------------------------------------------------------------------------------------
+float4 Lazer_RaveTunnel(float2 texcoord, float time)
+{
+    float2 uv = texcoord;
+    float2 center = float2(0.5f, 0.5f);
+    float2 p = uv - center;
+    
+    float dist = length(p);
+    float angle = atan2(p.y, p.x);
+    
+    float pattern = sin(dist * 20.0 - time * 6.0 + angle * 5.0);
+    
+    float v = abs(pattern);
+    
+    float4 color = float4(v, v, v, 1.0);
+    
+    // green
+    color *= float4(0.0, 1.0, 0.0, 1.0f);
+    
+    return color;
 }
 //--------------------------------------------------------------------------------------
 // Pixel Shader
