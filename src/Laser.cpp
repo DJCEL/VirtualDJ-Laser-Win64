@@ -363,7 +363,7 @@ HRESULT CLaser::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
 
-	const WCHAR* resourceName = L"LAZER_CSO";
+	const WCHAR* resourceName = L"LASER_CSO";
 	const WCHAR* resourceType = RT_RCDATA;
 	hr = Create_PixelShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
 
