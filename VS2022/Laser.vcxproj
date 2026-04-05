@@ -110,22 +110,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\Lazer.cpp" />
+    <ClCompile Include="..\src\Laser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Lazer.h" />
+    <ClInclude Include="..\src\Laser.h" />
     <ClInclude Include="..\src\VdjPlugin8.h" />
     <ClInclude Include="..\src\VdjVideo8.h" />
     <ClInclude Include="..\src\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\Shaders\Lazer.cso" />
+    <None Include="..\src\Shaders\Laser.cso" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\Plugin.rc" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\src\Shaders\Lazer.hlsl">
+    <FxCompile Include="..\src\Shaders\Laser.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

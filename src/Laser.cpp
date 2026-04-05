@@ -2,7 +2,7 @@
 
 
 //------------------------------------------------------------------------------------------
-CLazer::CLaser()
+CLaser::CLaser()
 {
 	pD3DDevice = nullptr; 
 	pD3DDeviceContext = nullptr;
@@ -15,6 +15,8 @@ CLazer::CLaser()
 	ZeroMemory(m_SliderValue, 1 * sizeof(float));
 	m_PSConstantBufferData = {};
 	m_DirectX_On = false;
+	m_WidthOnDeviceInit = 0;
+	m_HeightOnDeviceInit = 0;
 	m_Width = 0;
 	m_Height = 0;
 	m_VertexCount = 0;
@@ -23,7 +25,7 @@ CLazer::CLaser()
 	m_TimeInit = 0;
 }
 //------------------------------------------------------------------------------------------
-CLazer::~CLaser()
+CLaser::~CLaser()
 {
 
 }
@@ -190,7 +192,7 @@ void CLaser::setShaderPlaybackTime()
 	m_Time = (TimeNow - m_TimeInit) / 1000.0f;
 }
 //-----------------------------------------------------------------------
-void CLazer::OnResizeVideo()
+void CLaser::OnResizeVideo()
 {
 	m_Width = width;
 	m_Height = height;
@@ -309,7 +311,7 @@ HRESULT CLaser::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
+HRESULT CLaser::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
 {
 	HRESULT hr = S_FALSE;
 
@@ -332,7 +334,7 @@ HRESULT CLazer::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Update_Vertices_D3D11()
+HRESULT CLaser::Update_Vertices_D3D11()
 {
 	float frameWidth = (float) m_Width;
 	float frameHeight = (float) m_Height;
@@ -357,7 +359,7 @@ HRESULT CLazer::Update_Vertices_D3D11()
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Create_PixelShader_D3D11(ID3D11Device* pDevice)
+HRESULT CLaser::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
 
@@ -368,7 +370,7 @@ HRESULT CLazer::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
+HRESULT CLaser::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
 {
 	HRESULT hr = S_FALSE;
 
@@ -386,7 +388,7 @@ HRESULT CLazer::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevic
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data)
+HRESULT CLaser::ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data)
 {
 	HRESULT hr = S_FALSE;
 
@@ -405,7 +407,7 @@ HRESULT CLazer::ReadResource(const WCHAR* resourceType, const WCHAR* resourceNam
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Create_BlendState_D3D11(ID3D11Device* pDevice)
+HRESULT CLaser::Create_BlendState_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
 
@@ -432,7 +434,7 @@ HRESULT CLazer::Create_BlendState_D3D11(ID3D11Device* pDevice)
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
+HRESULT CLaser::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
 
@@ -455,7 +457,7 @@ HRESULT CLazer::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
+HRESULT CLaser::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
 {
 	HRESULT hr = S_FALSE;
 
@@ -477,7 +479,7 @@ HRESULT CLazer::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Update_PSConstantBufferData_D3D11()
+HRESULT CLaser::Update_PSConstantBufferData_D3D11()
 {
 	m_PSConstantBufferData.FX_Time = float(m_Time);
 	m_PSConstantBufferData.FX_SongPosBeats = (SongPosBeats < 0) ? 0.0f : float(SongPosBeats);
@@ -485,7 +487,7 @@ HRESULT CLazer::Update_PSConstantBufferData_D3D11()
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info)
+HRESULT CLaser::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info)
 {
 	HRESULT hr = S_FALSE;
 
@@ -524,7 +526,7 @@ HRESULT CLazer::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderR
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info)
+HRESULT CLaser::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info)
 {
 	HRESULT hr = S_FALSE;
 
