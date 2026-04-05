@@ -4,7 +4,7 @@
     <ClCompile Include="..\src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Lazer.cpp">
+    <ClCompile Include="..\src\Laser.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -12,7 +12,7 @@
     <ClInclude Include="..\src\resource.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Lazer.h">
+    <ClInclude Include="..\src\Laser.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\VdjPlugin8.h">
@@ -36,12 +36,12 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\Shaders\Lazer.cso">
+    <None Include="..\src\Shaders\Laser.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\src\Shaders\Lazer.hlsl">
+    <FxCompile Include="..\src\Shaders\Laser.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
