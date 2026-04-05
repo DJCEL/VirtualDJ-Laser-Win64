@@ -1,4 +1,4 @@
-#include "Lazer.h"
+#include "Laser.h"
 
 //--------------------------------------------------------------------------------------
 HRESULT VDJ_API DllGetClassObject(const GUID &rclsid,const GUID &riid,void** ppObject)
