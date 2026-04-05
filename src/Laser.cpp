@@ -28,7 +28,7 @@ CLazer::~CLaser()
 
 }
 //------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnLoad()
+HRESULT VDJ_API CLaser::OnLoad()
 {
 	HRESULT hr = S_FALSE;
 
@@ -38,24 +38,24 @@ HRESULT VDJ_API CLazer::OnLoad()
 	return S_OK;
 }
 //------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnGetPluginInfo(TVdjPluginInfo8 *info)
+HRESULT VDJ_API CLaser::OnGetPluginInfo(TVdjPluginInfo8 *info)
 {
 	info->Author = "djcel";
-	info->PluginName = "Lazer";
-	info->Description = "It emulates a lazer.";
+	info->PluginName = "Laser";
+	info->Description = "It emulates a green laser.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
 	info->Version = "1.0 (64-bit)";
 
 	return S_OK;
 }
 //------------------------------------------------------------------------------------------
-ULONG VDJ_API CLazer::Release()
+ULONG VDJ_API CLaser::Release()
 {
 	delete this;
 	return 0;
 }
 //------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnParameter(int id)
+HRESULT VDJ_API CLaser::OnParameter(int id)
 {
 	if (id == ID_INIT)
 	{
@@ -69,7 +69,7 @@ HRESULT VDJ_API CLazer::OnParameter(int id)
 	return S_OK;
 }
 //------------------------------------------------------------------------------------------
-void CLazer::OnSlider(int id)
+void CLaser::OnSlider(int id)
 {
 	switch (id)
 	{
@@ -79,7 +79,7 @@ void CLazer::OnSlider(int id)
 	}
 }
 //-------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnGetParameterString(int id, char* outParam, int outParamSize)
+HRESULT VDJ_API CLaser::OnGetParameterString(int id, char* outParam, int outParamSize)
 {
 	switch (id)
 	{
@@ -91,7 +91,7 @@ HRESULT VDJ_API CLazer::OnGetParameterString(int id, char* outParam, int outPara
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnDeviceInit()
+HRESULT VDJ_API CLaser::OnDeviceInit()
 {
 	HRESULT hr = S_FALSE;
 
@@ -107,7 +107,7 @@ HRESULT VDJ_API CLazer::OnDeviceInit()
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnDeviceClose()
+HRESULT VDJ_API CLaser::OnDeviceClose()
 {
 	Release_D3D11();
 	SAFE_RELEASE(pD3DRenderTargetView);
@@ -117,14 +117,14 @@ HRESULT VDJ_API CLazer::OnDeviceClose()
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnStart() 
+HRESULT VDJ_API CLaser::OnStart() 
 {
 	m_TimeInit = GetCurrentTimeMilliseconds();
 
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnStop() 
+HRESULT VDJ_API CLaser::OnStop() 
 {
 	m_Time = 0.0f;
 	m_TimeInit = 0;
@@ -132,7 +132,7 @@ HRESULT VDJ_API CLazer::OnStop()
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnDraw()
+HRESULT VDJ_API CLaser::OnDraw()
 {
 	HRESULT hr = S_FALSE;
 	ID3D11ShaderResourceView *pTexture = nullptr;
@@ -163,7 +163,7 @@ HRESULT VDJ_API CLazer::OnDraw()
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT VDJ_API CLazer::OnAudioSamples(float* buffer, int nb)
+HRESULT VDJ_API CLaser::OnAudioSamples(float* buffer, int nb)
 { 
 	#ifdef USE_FFT
 		int FFT_SIZE = 512; // Size of the FFT (must be a power of 2)
@@ -174,7 +174,7 @@ HRESULT VDJ_API CLazer::OnAudioSamples(float* buffer, int nb)
 	#endif
 }
 //-----------------------------------------------------------------------
-long long CLazer::GetCurrentTimeMilliseconds()
+long long CLaser::GetCurrentTimeMilliseconds()
 {
 	std::chrono::time_point time = std::chrono::system_clock::now();
 	std::chrono::duration since_epoch = time.time_since_epoch();
@@ -183,7 +183,7 @@ long long CLazer::GetCurrentTimeMilliseconds()
 	return milliseconds;
 }
 //-----------------------------------------------------------------------
-void CLazer::setShaderPlaybackTime()
+void CLaser::setShaderPlaybackTime()
 {
 	long long TimeNow = GetCurrentTimeMilliseconds();
 
@@ -196,7 +196,7 @@ void CLazer::OnResizeVideo()
 	m_Height = height;
 }
 //-----------------------------------------------------------------------
-HRESULT CLazer::Initialize_D3D11(ID3D11Device* pDevice)
+HRESULT CLaser::Initialize_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
 
@@ -215,7 +215,7 @@ HRESULT CLazer::Initialize_D3D11(ID3D11Device* pDevice)
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-void CLazer::Release_D3D11()
+void CLaser::Release_D3D11()
 {
 	SAFE_RELEASE(pNewVertexBuffer);
 	SAFE_RELEASE(pPixelShader);
@@ -223,7 +223,7 @@ void CLazer::Release_D3D11()
 	SAFE_RELEASE(pPSConstantBuffer);
 }
 // -----------------------------------------------------------------------
-HRESULT CLazer::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
+HRESULT CLaser::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
 	HRESULT hr = S_FALSE;
 
@@ -285,7 +285,7 @@ HRESULT CLazer::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDev
 	return S_OK;
 }
 // ---------------------------------------------------------------------- -
-HRESULT CLazer::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
+HRESULT CLaser::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
 
