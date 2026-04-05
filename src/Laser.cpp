@@ -1,8 +1,8 @@
-#include "Lazer.h"
+#include "Laser.h"
 
 
 //------------------------------------------------------------------------------------------
-CLazer::CLazer()
+CLazer::CLaser()
 {
 	pD3DDevice = nullptr; 
 	pD3DDeviceContext = nullptr;
@@ -23,7 +23,7 @@ CLazer::CLazer()
 	m_TimeInit = 0;
 }
 //------------------------------------------------------------------------------------------
-CLazer::~CLazer()
+CLazer::~CLaser()
 {
 
 }
