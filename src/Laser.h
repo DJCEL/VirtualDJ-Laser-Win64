@@ -1,5 +1,5 @@
-#ifndef LAZER_H
-#define LAZER_H
+#ifndef LASER_H
+#define LASER_H
 
 
 #include "vdjVideo8.h"
@@ -16,11 +16,11 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////////
 // Class definition
 //////////////////////////////////////////////////////////////////////////
-class CLazer : public IVdjPluginVideoFx8
+class CLaser : public IVdjPluginVideoFx8
 {
 public:
-	CLazer();
-	~CLazer();
+	CLaser();
+	~CLaser();
 	HRESULT VDJ_API OnLoad();
 	HRESULT VDJ_API OnGetPluginInfo(TVdjPluginInfo8 *info);
 	ULONG   VDJ_API Release();
