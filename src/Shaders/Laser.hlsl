@@ -14,6 +14,9 @@ cbuffer PS_CONSTANTBUFFER : register(b0)
 {
     float g_FX_Time;
     float g_FX_SongPosBeats;
+    float g_FX_Width;
+    float g_FX_Height;
+    float g_FX_Beats_on;
 };
 //--------------------------------------------------------------------------------------
 // Input structure

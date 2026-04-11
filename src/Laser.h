@@ -34,6 +34,10 @@ public:
 	HRESULT VDJ_API OnAudioSamples(float* buffer, int nb);
 
 private:
+	// Update these values if required:
+	static const UINT SLIDERVALUE_COUNT = 1;
+	static const UINT NEWVERTICES_COUNT = 6;
+
 	struct D3DXPOSITION
 	{
 		float x;
@@ -86,11 +90,11 @@ private:
 		float FX_SongPosBeats;
 		float FX_Width;
 		float FX_Height;
+		float FX_Beats_on; // if 1.0f, use the plugin uses FX_SongPosBeats, otherwise it uses FX_Time
 	};
 
 	void OnResizeVideo();
 	void OnSlider(int id);
-	void DetectBeats();
 	long long GetCurrentTimeMilliseconds();
 	void setShaderPlaybackTime();
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
@@ -118,17 +122,16 @@ private:
 	ID3D11PixelShader* pPixelShader;
 	ID3D11BlendState* pBlendState;
 	ID3D11Buffer* pPSConstantBuffer;
-
 	PS_CONSTANTBUFFER m_PSConstantBufferData;
 	
-	TLVERTEX pNewVertices[6];
-	UINT m_VertexCount;
+	TLVERTEX pNewVertices[NEWVERTICES_COUNT];
 	bool m_DirectX_On;
 	int m_WidthOnDeviceInit;
 	int m_HeightOnDeviceInit;
 	int m_Width;
 	int m_Height;
-	float m_SliderValue[1];
+	float m_SliderValue[SLIDERVALUE_COUNT];
+	int m_FX_Beats_on;
 	float m_alpha;
 	long long m_TimeInit;
 	float m_Time;
@@ -137,6 +140,8 @@ private:
 	{
 		ID_INIT,
 		ID_SLIDER_1,
+		ID_SLIDER_MAX,
+		ID_SWITCH_1
 	} ID_Interface;
 
 	

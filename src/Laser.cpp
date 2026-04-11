@@ -11,15 +11,16 @@ CLaser::CLaser()
 	pD3DRenderTargetView = nullptr;
 	pBlendState = nullptr;
 	pPSConstantBuffer = nullptr;
-	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
-	ZeroMemory(m_SliderValue, 1 * sizeof(float));
+	ZeroMemory(pNewVertices, NEWVERTICES_COUNT * sizeof(TVertex8));
+	ZeroMemory(m_SliderValue, SLIDERVALUE_COUNT * sizeof(float));
+	ZeroMemory(&m_PSConstantBufferData, sizeof(PS_CONSTANTBUFFER));
 	m_PSConstantBufferData = {};
 	m_DirectX_On = false;
+	m_FX_Beats_on = 0;
 	m_WidthOnDeviceInit = 0;
 	m_HeightOnDeviceInit = 0;
 	m_Width = 0;
 	m_Height = 0;
-	m_VertexCount = 0;
 	m_alpha = 1.0f;
 	m_Time = 0.0f;
 	m_TimeInit = 0;
@@ -35,6 +36,7 @@ HRESULT VDJ_API CLaser::OnLoad()
 	HRESULT hr = S_FALSE;
 
 	hr = DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
+	hr = DeclareParameterSwitch(&m_FX_Beats_on, ID_SWITCH_1, "FX Beats", "FX_B", 0.0f);
 	
 	OnParameter(ID_INIT);
 	return S_OK;
@@ -61,7 +63,7 @@ HRESULT VDJ_API CLaser::OnParameter(int id)
 {
 	if (id == ID_INIT)
 	{
-		for (int i = 1; i <= 1; i++) OnSlider(i);
+		for (int i = ID_SLIDER_1; i < ID_SLIDER_MAX; i++) OnSlider(i);
 	}
 	else
 	{
@@ -162,6 +164,9 @@ HRESULT VDJ_API CLaser::OnDraw()
 	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTexture, vertices);
 	if (hr != S_OK) return S_FALSE;
 
+	SAFE_RELEASE(pD3DRenderTargetView);
+	SAFE_RELEASE(pD3DDeviceContext);
+
 	return S_OK;
 }
 //-----------------------------------------------------------------------
@@ -243,8 +248,10 @@ HRESULT CLaser::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDev
 	if (pRenderTargetView)
 	{
 		FLOAT backgroundColor[4] = { 0.0f, 0.0f , 0.0f , 1.0f };
-		//pDeviceContext->ClearRenderTargetView(pRenderTargetView, backgroundColor);
-		//pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
+		/*
+		pDeviceContext->ClearRenderTargetView(pRenderTargetView, backgroundColor);
+		pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
+		*/
 	}
 
 	hr = Update_VertexBufferDynamic_D3D11(pDeviceContext);
@@ -282,7 +289,7 @@ HRESULT CLaser::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDev
 		pDeviceContext->IASetVertexBuffers(0, 1, &pNewVertexBuffer, &m_VertexStride, &m_VertexOffset);
 	}
 	
-	pDeviceContext->Draw(m_VertexCount, 0);
+	pDeviceContext->Draw(NEWVERTICES_COUNT, 0);
 	
 	return S_OK;
 }
@@ -293,16 +300,12 @@ HRESULT CLaser::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 
 	if (!pDevice) return S_FALSE;
 
-	// Set the number of vertices in the vertex array.
-	m_VertexCount = 6; // = ARRAYSIZE(pNewVertices);
-	
-	// Fill in a buffer description.
 	D3D11_BUFFER_DESC VertexBufferDesc;
 	ZeroMemory(&VertexBufferDesc, sizeof(VertexBufferDesc));
-	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;   // CPU_Access=Write_Only & GPU_Access=Read_Only
-	VertexBufferDesc.ByteWidth = sizeof(TLVERTEX) * m_VertexCount;
-	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER; //D3D11_BIND_INDEX_BUFFER
-	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // Allow CPU to write in buffer
+	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	VertexBufferDesc.ByteWidth = sizeof(TLVERTEX) * NEWVERTICES_COUNT;
+	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	VertexBufferDesc.MiscFlags = 0;
 
 	hr = pDevice->CreateBuffer(&VertexBufferDesc, NULL, &pNewVertexBuffer);
@@ -327,7 +330,7 @@ HRESULT CLaser::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
 
 	hr = Update_Vertices_D3D11();
 
-	memcpy(MappedSubResource.pData, pNewVertices, m_VertexCount * sizeof(TLVERTEX));
+	memcpy(MappedSubResource.pData, pNewVertices, NEWVERTICES_COUNT * sizeof(TLVERTEX));
 
 	ctx->Unmap(pNewVertexBuffer, NULL);
 
@@ -444,10 +447,10 @@ HRESULT CLaser::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
 	UINT CB_BYTEWIDTH = (SIZEOF_PS_CONSTANTBUFFER + 0xF) & 0xFFFFFFF0;
 
 	D3D11_BUFFER_DESC ConstantBufferDesc = {};
-	ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;  // CPU_Access=Write_Only & GPU_Access=Read_Only
+	ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	ConstantBufferDesc.ByteWidth = CB_BYTEWIDTH;
 	ConstantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	ConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;  // Allow CPU to write in buffer
+	ConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	ConstantBufferDesc.MiscFlags = 0;
 
 	// Create the constant buffer to send to the cbuffer in hlsl file
@@ -485,6 +488,7 @@ HRESULT CLaser::Update_PSConstantBufferData_D3D11()
 	m_PSConstantBufferData.FX_SongPosBeats = (SongPosBeats < 0) ? 0.0f : float(SongPosBeats);
 	m_PSConstantBufferData.FX_Width = float(m_Width);
 	m_PSConstantBufferData.FX_Height = float(m_Height);
+	m_PSConstantBufferData.FX_Beats_on = float(m_FX_Beats_on);
 
 	return S_OK;
 }
