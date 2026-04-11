@@ -441,7 +441,7 @@ HRESULT CLaser::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
 	if (!pDevice) return E_FAIL;
 
 	UINT SIZEOF_PS_CONSTANTBUFFER = sizeof(PS_CONSTANTBUFFER);
-	UINT CB_BYTEWIDTH = SIZEOF_PS_CONSTANTBUFFER + 0xf & 0xfffffff0;
+	UINT CB_BYTEWIDTH = (SIZEOF_PS_CONSTANTBUFFER + 0xF) & 0xFFFFFFF0;
 
 	D3D11_BUFFER_DESC ConstantBufferDesc = {};
 	ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;  // CPU_Access=Write_Only & GPU_Access=Read_Only
@@ -483,6 +483,8 @@ HRESULT CLaser::Update_PSConstantBufferData_D3D11()
 {
 	m_PSConstantBufferData.FX_Time = float(m_Time);
 	m_PSConstantBufferData.FX_SongPosBeats = (SongPosBeats < 0) ? 0.0f : float(SongPosBeats);
+	m_PSConstantBufferData.FX_Width = float(m_Width);
+	m_PSConstantBufferData.FX_Height = float(m_Height);
 
 	return S_OK;
 }

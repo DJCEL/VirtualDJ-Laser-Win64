@@ -84,6 +84,8 @@ private:
 	{
 		float FX_Time; // shader playback time
 		float FX_SongPosBeats;
+		float FX_Width;
+		float FX_Height;
 	};
 
 	void OnResizeVideo();
