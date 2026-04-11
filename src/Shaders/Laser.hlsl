@@ -49,7 +49,7 @@ float beatPulse(float beat)
     return pulse;
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v1(float2 texcoord, float time, float beat)
+float4 Laser_Club_v1(float2 texcoord, float time, float beat)
 {
     float2 uv = texcoord;
     float2 center = float2(0.5f, 0.5f);
@@ -90,7 +90,7 @@ float4 Lazer_Club_v1(float2 texcoord, float time, float beat)
     return color;
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v2(float2 texcoord, float time, float beat)
+float4 Laser_Club_v2(float2 texcoord, float time, float beat)
 {
     float2 uv = texcoord;
     float2 center = float2(0.5f, 0.5f);
@@ -128,7 +128,27 @@ float4 Lazer_Club_v2(float2 texcoord, float time, float beat)
     return color;
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v3(float2 texcoord, float time, float beat)
+float4 Laser_Club_v2_1(float2 texcoord, float time, float beat)
+{
+    float3 color_laser = float3(0.1, 1.4, 0.2);
+    float beamCount = 12;
+    
+    float2 uv = texcoord;
+    float2 center = float2(0.5f, 0.5f);
+    float2 p = uv - center;
+    
+    float angle = atan2(p.y, p.x);
+    float beams = abs(sin(angle * beamCount));
+    beams = smoothstep(0.985, 1.0, beams);
+
+    float3 col = color_laser * beams;
+    
+    float4 color = float4(col,1.0);
+    
+    return color;
+}
+//--------------------------------------------------------------------------------------
+float4 Laser_Club_v3(float2 texcoord, float time, float beat)
 {
     float2 uv = texcoord;
     float2 center = float2(0.5, 0.5);
@@ -212,7 +232,7 @@ float4 Lazer_Club_v3(float2 texcoord, float time, float beat)
     return float4(col, 1.0);
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v4(float2 texcoord, float time, float beat)
+float4 Laser_Club_v4(float2 texcoord, float time, float beat)
 {
     float2 uv = texcoord;
     float2 center = float2(0.5, 0.5);
@@ -291,7 +311,7 @@ float4 Lazer_Club_v4(float2 texcoord, float time, float beat)
     return float4(col, 1.0);
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v5(float2 texcoord, float time, float beat)
+float4 Laser_Club_v5(float2 texcoord, float time, float beat)
 {
     float2 center = float2(0.5, 0.5);
     float2 p = texcoord - center;
@@ -354,7 +374,7 @@ float4 Lazer_Club_v5(float2 texcoord, float time, float beat)
     return float4(col, 1.0);
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v6(float2 texcoord, float time, float beat)
+float4 Laser_Club_v6(float2 texcoord, float time, float beat)
 {
     float2 center = float2(0.5, 0.5);
     float2 p = texcoord - center;
@@ -424,7 +444,7 @@ float4 Lazer_Club_v6(float2 texcoord, float time, float beat)
     return float4(col, 1.0);
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v7(float2 uv, float time, float beat)
+float4 Laser_Club_v7(float2 uv, float time, float beat)
 {
     float2 center = float2(0.5, 0.5);
     float2 p = uv - center;
@@ -486,7 +506,7 @@ float4 Lazer_Club_v7(float2 uv, float time, float beat)
     return float4(col, 1.0);
 }
 //--------------------------------------------------------------------------------------
-float4 Lazer_Club_v8(float2 uv, float time, float beat)
+float4 Laser_Club_v8(float2 uv, float time, float beat)
 {
     float2 center = float2(0.5, 0.5);
     float2 p = uv - center;
@@ -548,7 +568,7 @@ float4 Lazer_Club_v8(float2 uv, float time, float beat)
 }
 
 //--------------------------------------------------------------------------------------
-float4 Lazer_RaveTunnel(float2 texcoord, float time)
+float4 Laser_RaveTunnel(float2 texcoord, float time)
 {
     float2 uv = texcoord;
     float2 center = float2(0.5f, 0.5f);
@@ -579,16 +599,17 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float4 color = float4(0, 0, 0, 0);
     
-    //color = Lazer_Club_v1(texcoord, iTime, iBeat);
-    color = Lazer_Club_v2(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v3(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v4(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v5(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v6(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v7(texcoord, iTime, iBeat);
-    //color = Lazer_Club_v8(texcoord, iTime, iBeat);
+    //color = Laser_Club_v1(texcoord, iTime, iBeat);
+    //color = Laser_Club_v2(texcoord, iTime, iBeat);
+    color = Laser_Club_v2_1(texcoord, iTime, iBeat);
+    //color = Laser_Club_v3(texcoord, iTime, iBeat);
+    //color = Laser_Club_v4(texcoord, iTime, iBeat);
+    //color = Laser_Club_v5(texcoord, iTime, iBeat);
+    //color = Laser_Club_v6(texcoord, iTime, iBeat);
+    //color = Laser_Club_v7(texcoord, iTime, iBeat);
+    //color = Laser_Club_v8(texcoord, iTime, iBeat);
     
-    //color = Lazer_RaveTunnel(texcoord, iTime);
+    //color = Laser_RaveTunnel(texcoord, iTime);
 
 
     PS_OUTPUT output;
