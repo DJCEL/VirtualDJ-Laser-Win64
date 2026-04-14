@@ -80,7 +80,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
     //--- Shader Parameters ---
-    float beamCount = 12.0;           // Number of laser beams
+    int beamCount = 12;           // Number of laser beams
     float spread = 1.5;               // Angular spread (radians)
     float thickness = 0.01;           // Base beam thickness
     float glowIntensity = 3.0;        // Glow intensity
@@ -118,9 +118,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
 
     
     
-    for (int i = 0; i < int(beamCount); i++)
+    for (int i = 0; i < beamCount; i++)
     {
-        float t = (float)i / (beamCount - 1.0);
+        float t = (float)i / (beamCount - 1);
         
         // Apply rotation to spread
         float angle = lerp(-spread * 0.5, spread * 0.5, t) + rotation;
