@@ -41,25 +41,22 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional Functions
 //--------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------
 // Improved beam function with better distance calculation
-//--------------------------------------------------------------------------------------
 float beam(float2 texcoord, float angle, float thickness)
 {
     float a = atan2(texcoord.y, texcoord.x);
     float d = abs(a - angle);
 
+    const float TWO_PI = 6.28318530718;
+
     // Wrap angle difference to shortest path
-    d = min(d, 6.28318530718 - d);
+    d = min(d, TWO_PI - d);
 
     // Smooth step for soft beam edges
     return smoothstep(thickness, 0.0, d);
 }
-
 //--------------------------------------------------------------------------------------
 // Glow function with configurable falloff
-//--------------------------------------------------------------------------------------
 float calculateGlow(float distance, float glowIntensity, float falloffPower)
 {
     // Use power function for more natural glow falloff
@@ -68,14 +65,12 @@ float calculateGlow(float distance, float glowIntensity, float falloffPower)
 
 //--------------------------------------------------------------------------------------
 // Beat-reactive color based on intensity
-//--------------------------------------------------------------------------------------
 float3 getBeatColor(float beatIntensity, float hueShift)
 {
     // Create color variation based on beat - oscillates between green and cyan
     float3 colorBase = float3(0.0, 1.0, 0.5 + 0.5 * sin(hueShift));
     return colorBase * (0.7 + 0.3 * beatIntensity);
 }
-
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
