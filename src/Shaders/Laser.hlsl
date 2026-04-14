@@ -1,6 +1,5 @@
 ////////////////////////////////
 // File: Laser.hlsl
-// Improved laser shader with beat reactivity and animations
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -38,6 +37,10 @@ struct PS_OUTPUT
 {
     float4 Color : SV_TARGET;
 };
+
+//--------------------------------------------------------------------------------------
+// Additional Functions
+//--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
 // Improved beam function with better distance calculation
@@ -90,6 +93,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float rotationSpeed = 0.5;        // Rotation speed factor
     float thicknessPulse = 0.003;     // Beat-based thickness variation
     
+    if (beamCount <= 1) beamCount=2
+
     //--- Texture Coordinates ---
     float2 texcoord = input.TexCoord;
     float2 origin = float2(0.5f, 0.5f);
@@ -115,8 +120,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     //--- Accumulate Beam Colors ---
     float3 col = float3(0.0, 0.0, 0.0);
+
     
-    for (int i = 0; i < 12; i++)
+    
+    for (int i = 0; i < beamCount; i++)
     {
         float t = (float)i / (beamCount - 1.0);
         
