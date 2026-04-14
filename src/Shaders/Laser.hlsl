@@ -97,7 +97,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float glowFalloff = 2.0;          // Glow falloff power (higher = sharper)
     float Speed = 0.5;        // Rotation speed factor
     float thicknessPulse = 0.003;     // Beat-based thickness variation
-    float noiseAmount = 0.05;
+    float noiseAmount = 0.01;
     
     if (beamCount <= 1) beamCount = 2;
 
@@ -126,7 +126,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float pulsingGlow = glowIntensity * (1.0 + 0.5 * beatIntensity);
     
     //--- Beam Rotation Animation ---
-    float rotation = time * Speed;
+    float rotation = 0; // time * Speed;
     
     //--- Accumulate Beam Colors ---
     float3 col = float3(0.0, 0.0, 0.0);
@@ -136,7 +136,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float beam = 0.0f;
     float glow = 0.0f;
     float intensity = 0.0f;
-    float3 beamColor = float3(0.0, 1.0, 0.0); // float3(0.3, 1.0, 0.2);
+    float3 beamColor = float3(0.0, 1.0, 0.0);
 
     for (int i = 0; i < beamCount; i++)
     {
@@ -149,6 +149,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         beam = getBeam(p, angle, pulsingThickness);
         
         glow = exp(-dist * glowFalloff) * pulsingGlow;
+
         
         // Combine beam and glow
         intensity = beam * glow;
@@ -159,7 +160,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     // Strong central core (white-hot)
     float core = exp(- dist * 20.0);
-    col += core * float3(1.0, 1.0, 0.8) * 1.0;
+    col += core * float3(0.3, 1.0, 0.2) * 1.0;
     
     
     // volumetric fog
