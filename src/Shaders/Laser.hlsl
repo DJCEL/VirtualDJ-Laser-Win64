@@ -77,13 +77,13 @@ float3 getBeatColor(float beatIntensity, float hueShift)
 PS_OUTPUT ps_main(PS_INPUT input)
 {
     // Use beat information if available, otherwise use time
-    float animTime = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
+    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
     //--- Shader Parameters ---
     float beamCount = 12.0;           // Number of laser beams
     float spread = 1.5;               // Angular spread (radians)
-    float thickness = 0.01;           // Base beam thickness [0.01-0.03]
-    float glowIntensity = 3.0;        // Glow intensity [2.0-5.0]
+    float thickness = 0.01;           // Base beam thickness
+    float glowIntensity = 3.0;        // Glow intensity
     float glowFalloff = 2.0;          // Glow falloff power (higher = sharper)
     float rotationSpeed = 0.5;        // Rotation speed factor
     float thicknessPulse = 0.003;     // Beat-based thickness variation
@@ -101,7 +101,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     //--- Beat Reactivity ---
     // Calculate beat intensity (0 to 1)
-    float beatPhase = frac(animTime);
+    float beatPhase = frac(time);
     float beatIntensity = smoothstep(0.8, 0.0, beatPhase); // Sharp attack, slow decay
     
     // Modulate thickness based on beats
@@ -111,7 +111,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float pulsingGlow = glowIntensity * (1.0 + 0.5 * beatIntensity);
     
     //--- Beam Rotation Animation ---
-    float rotation = animTime * rotationSpeed;
+    float rotation = time * rotationSpeed;
     
     //--- Accumulate Beam Colors ---
     float3 col = float3(0.0, 0.0, 0.0);
