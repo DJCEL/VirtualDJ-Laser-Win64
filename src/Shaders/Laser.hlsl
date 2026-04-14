@@ -42,7 +42,7 @@ struct PS_OUTPUT
 // Additional Functions
 //--------------------------------------------------------------------------------------
 // Improved beam function with better distance calculation
-float beam(float2 texcoord, float angle, float thickness)
+float getBeam(float2 texcoord, float angle, float thickness)
 {
     float a = atan2(texcoord.y, texcoord.x);
     float d = abs(a - angle);
@@ -131,13 +131,13 @@ PS_OUTPUT ps_main(PS_INPUT input)
         angle = lerp(-spread * 0.5, spread * 0.5, idx) + rotation;
         
         // Calculate beam contribution
-        b = beam(texcoord2, angle, pulsingThickness);
+        beam = getBeam(texcoord2, angle, pulsingThickness);
         
         // Calculate glow with improved falloff
-        g = calculateGlow(dist, pulsingGlow, glowFalloff);
+        glow = calculateGlow(dist, pulsingGlow, glowFalloff);
         
         // Combine beam and glow
-        intensity = b * g;
+        intensity = beam * glow;
         
         // Get beat-reactive color with hue variation based on beam index
         beamColor = getBeatColor(beatIntensity, float(i) * 0.5 + rotation);
