@@ -118,7 +118,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
 
     
     
-    for (int i = 0; i < beamCount; i++)
+    for (int i = 0; i < int(beamCount); i++)
     {
         float t = (float)i / (beamCount - 1.0);
         
