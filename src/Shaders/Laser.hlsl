@@ -118,8 +118,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
 
     float idx = 0.0f;
     float angle = 0.0f;
-    float b = 0.0f;
-    float g = 0.0f;
+    float beam = 0.0f;
+    float glow = 0.0f;
     float intensity = 0.0f;
     float3 beamColor = float3(0,0,0);
 
