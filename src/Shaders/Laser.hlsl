@@ -86,7 +86,7 @@ float calculateGlow(float distance, float glowIntensity, float falloffPower)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    // Use beat information if available, otherwise use time
+    float iTime = g_FX_Time;
     float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
     //--- Shader Parameters ---
@@ -111,7 +111,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     p = float2(-p.y, p.x);
     
     // Smoke
-    //float n = noise(p * 3.0 + time * Speed);
+    //float n = noise(p * 3.0 + iTime);
     //p += (n - 0.5) * noiseAmount;
     
     //--- Beat Reactivity ---
@@ -124,10 +124,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     // Modulate glow based on beats
     float pulsingGlow = glowIntensity * (1.0 + 0.5 * beatIntensity);
-    
-    //--- Beam Rotation Animation ---
-    float rotation = 0; // time * Speed;
-    
+       
     //--- Accumulate Beam Colors ---
     float3 col = float3(0.0, 0.0, 0.0);
 
@@ -143,14 +140,13 @@ PS_OUTPUT ps_main(PS_INPUT input)
         idxf = (float)i / (beamCount - 1);
         
         // Apply rotation to spread
-        angle = lerp(-spread * 0.5, spread * 0.5, idxf) + rotation;
+        angle = lerp(-spread * 0.5, spread * 0.5, idxf);
         
         // Calculate beam contribution
         beam = getBeam(p, angle, pulsingThickness);
         
         glow = exp(-dist * glowFalloff) * pulsingGlow;
 
-        
         // Combine beam and glow
         intensity = beam * glow;
         
@@ -164,7 +160,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     
     // volumetric fog
-    float fog = noise(texcoord * 2.0 * time * 0.2);
+    float fog = noise(texcoord * 2.0 * iTime * 0.2);
     float fogMask = smoothstep(0.2, 1.0, fog);
     col += fogMask * 0.2;
     
