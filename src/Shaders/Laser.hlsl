@@ -88,7 +88,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float rotationSpeed = 0.5;        // Rotation speed factor
     float thicknessPulse = 0.003;     // Beat-based thickness variation
     
-    if (beamCount <= 1) beamCount=2
+    if (beamCount <= 1) beamCount=2;
 
     //--- Texture Coordinates ---
     float2 texcoord = input.TexCoord;
