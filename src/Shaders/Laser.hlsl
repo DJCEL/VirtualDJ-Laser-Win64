@@ -116,28 +116,28 @@ PS_OUTPUT ps_main(PS_INPUT input)
     //--- Accumulate Beam Colors ---
     float3 col = float3(0.0, 0.0, 0.0);
 
-    float idx = 0.0f;
+    float idxf = 0.0f;
     float angle = 0.0f;
-    float beam = 0.0f;
-    float glow = 0.0f;
+    float beamValue = 0.0f;
+    float glowValue = 0.0f;
     float intensity = 0.0f;
     float3 beamColor = float3(0,0,0);
 
     for (int i = 0; i < beamCount; i++)
     {
-        idx = (float)i / (beamCount - 1);
+        idxf = (float)i / (beamCount - 1);
         
         // Apply rotation to spread
         angle = lerp(-spread * 0.5, spread * 0.5, idx) + rotation;
         
         // Calculate beam contribution
-        beam = getBeam(texcoord2, angle, pulsingThickness);
+        beamValue = getBeam(texcoord2, angle, pulsingThickness);
         
         // Calculate glow with improved falloff
-        glow = calculateGlow(dist, pulsingGlow, glowFalloff);
+        glowValue = calculateGlow(dist, pulsingGlow, glowFalloff);
         
         // Combine beam and glow
-        intensity = beam * glow;
+        intensity = beamValue * glowValue;
         
         // Get beat-reactive color with hue variation based on beam index
         beamColor = getBeatColor(beatIntensity, float(i) * 0.5 + rotation);
