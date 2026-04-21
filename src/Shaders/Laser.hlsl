@@ -123,29 +123,29 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float pulsingThickness = thickness + (thicknessPulse * beatIntensity);
     
     // Modulate glow based on beats
-    float pulsingGlow = glowIntensity * (1.0 + 0.5 * beatIntensity);
+    float pulsingGlow = (1.0 + 0.5 * beatIntensity);
        
     //--- Accumulate Beam Colors ---
     float3 col = float3(0.0, 0.0, 0.0);
 
-    float idxf = 0.0f;
+    float j = 0.0f;
     float angle = 0.0f;
     float beam = 0.0f;
     float glow = 0.0f;
     float intensity = 0.0f;
     float3 beamColor = float3(0.0, 1.0, 0.0);
-
+    
     for (int i = 0; i < beamCount; i++)
     {
-        idxf = (float)i / (beamCount - 1);
+        j = (float)i / (beamCount - 1);
         
         // Apply rotation to spread
-        angle = lerp(-spread * 0.5, spread * 0.5, idxf);
+        angle = lerp(-spread * 0.5, spread * 0.5, j);
         
         // Calculate beam contribution
         beam = getBeam(p, angle, pulsingThickness);
         
-        glow = exp(-dist * glowFalloff) * pulsingGlow;
+        glow = exp(-dist * glowFalloff) * glowIntensity; // * pulsingGlow;
 
         // Combine beam and glow
         intensity = beam * glow;
